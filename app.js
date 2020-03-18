@@ -11,7 +11,7 @@ const playstore = require('./playstore-data.js');
 
 // will accept 2 parameters (sort and genres)
 app.get('/apps', (req, res) => {
-    const { sort, genres } = req.query;
+    const { sort = '', genres = ''} = req.query;
 
     if (sort) {
         if(!['Rating', 'App'].includes(sort)) {
@@ -29,12 +29,15 @@ app.get('/apps', (req, res) => {
         }
     }
 
+    console.log(`sort query: ${sort}`);
+    console.log(`genres query: ${genres}`);
+    
     let results = playstore
-        .filter(app =>
-            app
-                .Genres
-                .toLowerCase()
-                .includes(genres.toLowerCase()));
+    .filter(app =>
+        app
+            .Genres
+            .toLowerCase()
+            .includes(genres.toLowerCase()));
 
                 
     if (sort === 'App') {
@@ -53,6 +56,4 @@ app.get('/apps', (req, res) => {
         .json(results);
 });
 
-app.listen(8000, () => {
-    console.log('Server started on PORT 8000')
-});
+module.exports = app;
